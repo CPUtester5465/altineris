@@ -256,19 +256,19 @@ export default function DigitalBehaviorPage({ onClose, isModal = false }: Digita
             <div className="contact-grid">
               <div className="contact-item">
                 <strong>Research Team:</strong>
-                <p>research@behavioralprofile.com</p>
+                <p>research@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Collaboration Inquiries:</strong>
-                <p>partnerships@behavioralprofile.com</p>
+                <p>partnerships@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Technical Details:</strong>
-                <p>tech@behavioralprofile.com</p>
+                <p>tech@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Media Inquiries:</strong>
-                <p>media@behavioralprofile.com</p>
+                <p>media@altineris.com</p>
               </div>
             </div>
           </div>

@@ -333,19 +333,19 @@ export default function DemocratizeInsightsPage({ onClose, isModal = false }: De
             <div className="contact-grid">
               <div className="contact-item">
                 <strong>General Inquiries:</strong>
-                <p>hello@behavioralprofile.com</p>
+                <p>hello@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Educational Partnerships:</strong>
-                <p>education@behavioralprofile.com</p>
+                <p>education@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Community Support:</strong>
-                <p>community@behavioralprofile.com</p>
+                <p>community@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Technical Help:</strong>
-                <p>support@behavioralprofile.com</p>
+                <p>support@altineris.com</p>
               </div>
             </div>
           </div>

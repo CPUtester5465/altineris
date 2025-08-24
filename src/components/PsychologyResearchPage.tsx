@@ -281,19 +281,19 @@ export default function PsychologyResearchPage({ onClose, isModal = false }: Psy
             <div className="contact-grid">
               <div className="contact-item">
                 <strong>Research Director:</strong>
-                <p>director@behavioralprofile.com</p>
+                <p>director@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Collaboration Coordinator:</strong>
-                <p>partnerships@behavioralprofile.com</p>
+                <p>partnerships@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Data Access Requests:</strong>
-                <p>data@behavioralprofile.com</p>
+                <p>data@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Technical Support:</strong>
-                <p>support@behavioralprofile.com</p>
+                <p>support@altineris.com</p>
               </div>
             </div>
           </div>

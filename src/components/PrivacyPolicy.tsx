@@ -221,7 +221,7 @@ export default function PrivacyPolicy({ onClose, isModal = false }: PrivacyPolic
                 </ul>
                 
                 <div className="rights-contact">
-                  <strong>To exercise your rights:</strong> Contact us at privacy@behavioralprofile.com
+                  <strong>To exercise your rights:</strong> Contact us at privacy@altineris.com
                   <br />
                   <strong>Response time:</strong> We'll respond within 30 days of your request.
                 </div>
@@ -261,19 +261,19 @@ export default function PrivacyPolicy({ onClose, isModal = false }: PrivacyPolic
             <div className="contact-grid">
               <div className="contact-item">
                 <strong>Data Protection Officer:</strong>
-                <p>privacy@behavioralprofile.com</p>
+                <p>privacy@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Research Team:</strong>
-                <p>research@behavioralprofile.com</p>
+                <p>research@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>General Inquiries:</strong>
-                <p>hello@behavioralprofile.com</p>
+                <p>hello@altineris.com</p>
               </div>
               <div className="contact-item">
                 <strong>Data Requests:</strong>
-                <p>Use our data request form or email privacy@behavioralprofile.com</p>
+                <p>Use our data request form or email privacy@altineris.com</p>
               </div>
             </div>
           </div>
