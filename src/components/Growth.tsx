@@ -1,19 +1,30 @@
 import { useRef } from 'react';
 
-interface GrowthOption {
+interface ResearchGoal {
   id: string;
   className: string;
   text: string;
+  description: string;
   beamTarget: { x: number; y: number };
 }
 
-const growthOptions: GrowthOption[] = [
-  { id: 'muscles', className: 'muscles', text: 'Grow Muscles', beamTarget: { x: 400, y: 100 } },
-  { id: 'team', className: 'team', text: 'Grow Team', beamTarget: { x: 150, y: 400 } },
-  { id: 'professionalism', className: 'professionalism', text: 'Grow Professionalism', beamTarget: { x: 650, y: 400 } }
+interface GrowthProps {
+  onShowDigitalBehavior?: () => void;
+  onShowPsychologyResearch?: () => void;
+  onShowDemocratizeInsights?: () => void;
+}
+
+const researchGoals: ResearchGoal[] = [
+  { id: 'understand-behavior', className: 'participant', text: 'Understand Digital Behavior', description: 'Map how video interactions reveal personality traits', beamTarget: { x: 400, y: 100 } },
+  { id: 'advance-psychology', className: 'researcher', text: 'Advance Psychology Research', description: 'Create new tools for behavioral analysis', beamTarget: { x: 150, y: 400 } },
+  { id: 'democratize-insights', className: 'learn-more', text: 'Democratize Insights', description: 'Make psychological profiling accessible', beamTarget: { x: 650, y: 400 } }
 ];
 
-export default function Growth() {
+export default function Growth({ 
+  onShowDigitalBehavior, 
+  onShowPsychologyResearch, 
+  onShowDemocratizeInsights 
+}: GrowthProps) {
   const centerRef = useRef<HTMLDivElement>(null);
 
   const createLightBurst = (element: HTMLElement) => {
@@ -41,13 +52,13 @@ export default function Growth() {
       // Animate particle based on direction
       let targetX = 0, targetY = 0;
       
-      if (element.classList.contains('muscles')) {
+      if (element.classList.contains('participant')) {
         targetY = -150 - Math.random() * 50;
         targetX = (Math.random() - 0.5) * 50;
-      } else if (element.classList.contains('team')) {
+      } else if (element.classList.contains('researcher')) {
         targetX = -150 - Math.random() * 50;
         targetY = 100 + Math.random() * 50;
-      } else if (element.classList.contains('professionalism')) {
+      } else if (element.classList.contains('learn-more')) {
         targetX = 150 + Math.random() * 50;
         targetY = 100 + Math.random() * 50;
       }
@@ -70,7 +81,7 @@ export default function Growth() {
     }
   };
 
-  const handleMouseEnter = (option: GrowthOption, element: HTMLElement) => {
+  const handleMouseEnter = (goal: ResearchGoal, element: HTMLElement) => {
     // Create additional light particles
     createLightBurst(element);
     
@@ -81,7 +92,7 @@ export default function Growth() {
     }
     
     // Animate SVG beam line
-    const beamLine = document.querySelector(`.beam-${option.id}`) as SVGLineElement;
+    const beamLine = document.querySelector(`.beam-${goal.id}`) as SVGLineElement;
     if (beamLine) {
       beamLine.style.transition = 'all 0.3s ease';
       beamLine.setAttribute('stroke-width', '3');
@@ -89,45 +100,61 @@ export default function Growth() {
       beamLine.style.filter = 'drop-shadow(0 0 10px rgba(147, 51, 234, 0.8))';
     }
     
-    // Highlight dotted line for team and professionalism
-    if (option.id === 'team' || option.id === 'professionalism') {
-      const dottedLine = document.querySelector(`.dotted-${option.id}`) as SVGLineElement;
+    // Highlight dotted line for advance-psychology and democratize-insights
+    if (goal.id === 'advance-psychology' || goal.id === 'democratize-insights') {
+      const dottedLine = document.querySelector(`.dotted-${goal.id}`) as SVGLineElement;
       if (dottedLine) {
         dottedLine.classList.add('highlighted');
       }
     }
   };
 
-  const handleMouseLeave = (option: GrowthOption) => {
+  const handleMouseLeave = (goal: ResearchGoal) => {
     if (centerRef.current) {
       centerRef.current.style.transform = 'scale(1)';
       centerRef.current.style.background = 'radial-gradient(circle, rgba(147, 51, 234, 0.3), transparent)';
     }
     
     // Reset SVG beam line
-    const beamLine = document.querySelector(`.beam-${option.id}`) as SVGLineElement;
+    const beamLine = document.querySelector(`.beam-${goal.id}`) as SVGLineElement;
     if (beamLine) {
       beamLine.setAttribute('stroke-width', '0');
       beamLine.setAttribute('opacity', '0');
     }
     
-    // Remove highlight from dotted line for team and professionalism
-    if (option.id === 'team' || option.id === 'professionalism') {
-      const dottedLine = document.querySelector(`.dotted-${option.id}`) as SVGLineElement;
+    // Remove highlight from dotted line for advance-psychology and democratize-insights
+    if (goal.id === 'advance-psychology' || goal.id === 'democratize-insights') {
+      const dottedLine = document.querySelector(`.dotted-${goal.id}`) as SVGLineElement;
       if (dottedLine) {
         dottedLine.classList.remove('highlighted');
       }
     }
   };
 
+  const handleGoalClick = (goal: ResearchGoal) => {
+    switch (goal.id) {
+      case 'understand-behavior':
+        onShowDigitalBehavior?.();
+        break;
+      case 'advance-psychology':
+        onShowPsychologyResearch?.();
+        break;
+      case 'democratize-insights':
+        onShowDemocratizeInsights?.();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="content-section section" data-section="1">
-      <div className="growth-container">
-        <div className="growth-center" ref={centerRef}></div>
+      <div className="research-container">
+        <div className="research-center" ref={centerRef}></div>
         
         {/* Connecting light beams from center */}
         <svg 
-          className="growth-lines" 
+          className="research-lines" 
           width="800" 
           height="500" 
           style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
@@ -140,9 +167,9 @@ export default function Growth() {
             </linearGradient>
           </defs>
           
-          {/* Dotted lines for team and professionalism only */}
+          {/* Dotted lines for advance-psychology and democratize-insights only */}
           <line
-            className="dotted-line dotted-team"
+            className="dotted-line dotted-advance-psychology"
             x1="400"
             y1="250"
             x2="150"
@@ -153,7 +180,7 @@ export default function Growth() {
             opacity="1"
           />
           <line
-            className="dotted-line dotted-professionalism"
+            className="dotted-line dotted-democratize-insights"
             x1="400"
             y1="250"
             x2="650"
@@ -165,14 +192,14 @@ export default function Growth() {
           />
           
           {/* Hover beam lines */}
-          {growthOptions.map((option) => (
+          {researchGoals.map((goal) => (
             <line
-              key={option.id}
-              className={`beam-line beam-${option.id}`}
+              key={goal.id}
+              className={`beam-line beam-${goal.id}`}
               x1="400"
               y1="250"
-              x2={option.beamTarget.x}
-              y2={option.beamTarget.y}
+              x2={goal.beamTarget.x}
+              y2={goal.beamTarget.y}
               stroke="url(#beam-gradient)"
               strokeWidth="0"
               opacity="0"
@@ -180,17 +207,22 @@ export default function Growth() {
           ))}
         </svg>
         
-        {growthOptions.map((option) => (
+        {researchGoals.map((goal) => (
           <div
-            key={option.id}
-            className={`growth-option ${option.className}`}
-            data-beam={option.id}
-            onMouseEnter={(e) => handleMouseEnter(option, e.currentTarget)}
-            onMouseLeave={() => handleMouseLeave(option)}
+            key={goal.id}
+            className={`research-option ${goal.className}`}
+            data-beam={goal.id}
+            onMouseEnter={(e) => handleMouseEnter(goal, e.currentTarget)}
+            onMouseLeave={() => handleMouseLeave(goal)}
+            onClick={() => handleGoalClick(goal)}
+            style={{ cursor: 'pointer' }}
           >
-            <div className="growth-beam"></div>
-            <div className="growth-glow"></div>
-            <div className="growth-text">{option.text}</div>
+            <div className="research-beam"></div>
+            <div className="research-glow"></div>
+            <div className="research-content">
+              <div className="research-text">{goal.text}</div>
+              <div className="research-description">{goal.description}</div>
+            </div>
           </div>
         ))}
       </div>
