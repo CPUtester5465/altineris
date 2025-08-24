@@ -40,10 +40,48 @@ function App() {
     }
   }, [isScrolling, totalSections]);
 
+  // Function to initialize main page sections
+  const initializeMainPageSections = useCallback(() => {
+    const sections = sectionsRef.current?.querySelectorAll('.section');
+    sections?.forEach((section: Element, i: number) => {
+      const htmlSection = section as HTMLElement;
+      htmlSection.style.transform = `translateY(${i * 100}vh)`;
+      htmlSection.style.position = 'absolute';
+      htmlSection.style.top = '0';
+      htmlSection.style.left = '0';
+      htmlSection.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+  }, []);
+
+  // Function to restore main page state
+  const restoreMainPageState = useCallback(() => {
+    // Reset all page states
+    setShowPrivacyPage(false);
+    setShowDigitalBehaviorPage(false);
+    setShowPsychologyResearchPage(false);
+    setShowDemocratizeInsightsPage(false);
+    
+    // Reset to first section
+    setCurrentSection(0);
+    
+    // Restore main page styles
+    document.body.classList.remove('privacy-page-open');
+    document.documentElement.classList.remove('privacy-page-open');
+    document.body.style.cursor = 'none';
+    document.documentElement.style.overflowY = 'hidden';
+    document.documentElement.style.height = '100vh';
+    
+    // Re-initialize sections
+    setTimeout(() => {
+      initializeMainPageSections();
+    }, 50); // Small delay to ensure DOM is ready
+  }, [initializeMainPageSections]);
+
   useEffect(() => {
     // Check URL for page navigation
     const urlParams = new URLSearchParams(window.location.search);
     const page = urlParams.get('page');
+    
     if (page === 'privacy') {
       setShowPrivacyPage(true);
       // Enable scrolling and restore cursor
@@ -76,18 +114,16 @@ function App() {
       document.body.style.cursor = 'auto';
       document.documentElement.style.overflowY = 'auto';
       document.documentElement.style.height = 'auto';
+    } else {
+      // No page parameter - restore main page
+      restoreMainPageState();
     }
 
-    // Initialize sections positions
-    const sections = sectionsRef.current?.querySelectorAll('.section');
-    sections?.forEach((section: Element, i: number) => {
-      const htmlSection = section as HTMLElement;
-      htmlSection.style.transform = `translateY(${i * 100}vh)`;
-      htmlSection.style.position = 'absolute';
-      htmlSection.style.top = '0';
-      htmlSection.style.left = '0';
-    });
-  }, []);
+    // Initialize sections positions on first load
+    if (!page) {
+      initializeMainPageSections();
+    }
+  }, [restoreMainPageState, initializeMainPageSections]);
 
   // Handle privacy policy navigation
   const showPrivacyPolicy = () => {
@@ -102,14 +138,10 @@ function App() {
   };
 
   const hidePrivacyPolicy = () => {
-    setShowPrivacyPage(false);
-    // Restore original styles
-    document.body.classList.remove('privacy-page-open');
-    document.documentElement.classList.remove('privacy-page-open');
-    document.body.style.cursor = 'none';
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
+    // Navigate back to main page using history API
     window.history.pushState(null, '', window.location.pathname);
+    // Manually trigger state restoration
+    restoreMainPageState();
   };
 
   // Digital Behavior page navigation
@@ -125,14 +157,10 @@ function App() {
   };
 
   const handleHideDigitalBehaviorPage = () => {
-    setShowDigitalBehaviorPage(false);
-    // Restore original styles
-    document.body.classList.remove('privacy-page-open');
-    document.documentElement.classList.remove('privacy-page-open');
-    document.body.style.cursor = 'none';
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
+    // Navigate back to main page using history API
     window.history.pushState(null, '', window.location.pathname);
+    // Manually trigger state restoration
+    restoreMainPageState();
   };
 
   // Psychology Research page navigation
@@ -148,14 +176,10 @@ function App() {
   };
 
   const handleHidePsychologyResearchPage = () => {
-    setShowPsychologyResearchPage(false);
-    // Restore original styles
-    document.body.classList.remove('privacy-page-open');
-    document.documentElement.classList.remove('privacy-page-open');
-    document.body.style.cursor = 'none';
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
+    // Navigate back to main page using history API
     window.history.pushState(null, '', window.location.pathname);
+    // Manually trigger state restoration
+    restoreMainPageState();
   };
 
   // Democratize Insights page navigation
@@ -171,14 +195,10 @@ function App() {
   };
 
   const handleHideDemocratizeInsightsPage = () => {
-    setShowDemocratizeInsightsPage(false);
-    // Restore original styles
-    document.body.classList.remove('privacy-page-open');
-    document.documentElement.classList.remove('privacy-page-open');
-    document.body.style.cursor = 'none';
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
+    // Navigate back to main page using history API
     window.history.pushState(null, '', window.location.pathname);
+    // Manually trigger state restoration
+    restoreMainPageState();
   };
 
   useEffect(() => {
@@ -250,6 +270,27 @@ function App() {
       clearTimeout(wheelTimeout);
     };
   }, [currentSection, isScrolling, scrollToSection, showPrivacyPage, showDigitalBehaviorPage, showPsychologyResearchPage, showDemocratizeInsightsPage]);
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // Re-check URL and update state accordingly
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get('page');
+      
+      if (!page) {
+        // User navigated back to main page
+        restoreMainPageState();
+      }
+      // If there's a page parameter, the initial useEffect will handle it
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [restoreMainPageState]);
 
   // Cleanup on unmount
   useEffect(() => {
